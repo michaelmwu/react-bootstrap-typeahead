@@ -1,4 +1,4 @@
-import {pick} from 'lodash';
+import {head, pick} from 'lodash';
 import React from 'react';
 
 import TypeaheadContext from '../TypeaheadContext';
@@ -43,12 +43,13 @@ function contextContainer(Typeahead) {
     }
 
     _handleKeyDown = (e) => {
-      const {initialItem, onKeyDown, onAdd} = this.props;
+      const {initialItem, onKeyDown, onAdd, results} = this.props;
+      const item = initialItem || (results.length === 1 && head(results));
 
       switch (e.keyCode) {
         case RETURN:
-          if (getIsOnlyResult(this.props)) {
-            onAdd(initialItem);
+          if (getIsOnlyResult(this.props) && item) {
+            onAdd(item);
           }
           break;
         default:
